@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -43,19 +43,6 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [licenseImages, setLicenseImages] = useState<{ front: string | null, back: string | null }>({ front: null, back: null });
-  const [userRegistrations, setUserRegistrations] = useState<{ date: string, users: number }[]>([]);
-
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const data = await getUsers();
-      setUsers(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'حدث خطأ في جلب بيانات المستخدمين');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const fetchAllUsersWithLicenseStatus = async () => {
@@ -64,7 +51,7 @@ const UserManagement = () => {
         const users = await getUsers();
         // جلب حالة الترخيص لكل مستخدم
         const usersWithStatus = await Promise.all(
-          users.map(async (user) => {
+          users.map(async (user: any) => {
             try {
               const res = await fetch('http://81.10.91.96:8132/api/get-license', {
                 method: 'POST',
@@ -96,7 +83,7 @@ const UserManagement = () => {
         try {
           const users = await getUsers();
           const usersWithStatus = await Promise.all(
-            users.map(async (user) => {
+            users.map(async (user: any) => {
               try {
                 const res = await fetch('http://81.10.91.96:8132/api/get-license', {
                   method: 'POST',
@@ -133,7 +120,7 @@ const UserManagement = () => {
         try {
           const users = await getUsers();
           const usersWithStatus = await Promise.all(
-            users.map(async (user) => {
+            users.map(async (user: any) => {
               try {
                 const res = await fetch('http://81.10.91.96:8132/api/get-license', {
                   method: 'POST',
@@ -162,7 +149,7 @@ const UserManagement = () => {
       setLoading(true);
       const data = await searchUsers(searchQuery);
       // تحويل كل مستخدم لنفس شكل المستخدم في getUsers
-      const normalizedUsers = data.map((user) => ({
+      const normalizedUsers = data.map((user: any) => ({
         id: user.id || user.User_id,
         fullName: user.fullName || `${user.first_name || ''} ${user.last_name || ''}`,
         email: user.email,
@@ -172,7 +159,7 @@ const UserManagement = () => {
       }));
       // جلب حالة الترخيص لكل مستخدم في نتائج البحث
       const usersWithStatus = await Promise.all(
-        normalizedUsers.map(async (user) => {
+        normalizedUsers.map(async (user: any) => {
           try {
             const res = await fetch('http://81.10.91.96:8132/api/get-license', {
               method: 'POST',
@@ -278,7 +265,7 @@ const UserManagement = () => {
       .then(res => res.json())
       .then(data => {
         // فلترة المستخدمين ليكونوا فقط من نوع google
-        const googleUsers = data.data.users.filter(user => user.user_type === 'google');
+        const googleUsers = data.data.users.filter((user: any) => user.user_type === 'google');
         // جهز مصفوفة آخر 30 يوم
         const days = Array.from({ length: 30 }, (_, i) => {
           const date = subDays(new Date(), 29 - i);
@@ -286,15 +273,13 @@ const UserManagement = () => {
         });
 
         // عد المستخدمين لكل يوم
-        googleUsers.forEach(user => {
+        googleUsers.forEach((user: any) => {
           const created = user.created_at ? user.created_at.slice(0, 10) : null;
           if (created) {
             const day = days.find(d => d.date === created);
             if (day) day.users += 1;
           }
         });
-
-        setUserRegistrations(days);
       });
   }, []);
 

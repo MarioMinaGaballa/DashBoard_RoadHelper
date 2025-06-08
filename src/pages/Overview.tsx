@@ -62,14 +62,14 @@ const Overview: React.FC = () => {
       .then(data => {
         setTotalUsers(data.data.users.length);
         // فلترة مستخدمي Google فقط
-        const googleUsers = data.data.users.filter(user => user.user_type === 'google');
+        const googleUsers = data.data.users.filter((user: any) => user.user_type === 'google');
         // تجهيز مصفوفة آخر 30 يوم
         const days = Array.from({ length: 30 }, (_, i) => {
           const date = subDays(new Date(), 29 - i);
           return { date: format(date, 'yyyy-MM-dd'), users: 0 };
         });
         // عد المستخدمين لكل يوم
-        googleUsers.forEach(user => {
+        googleUsers.forEach((user: any) => {
           const created = user.created_at ? user.created_at.slice(0, 10) : null;
           if (created) {
             const day = days.find(d => d.date === created);
@@ -195,7 +195,7 @@ const Overview: React.FC = () => {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {mockServiceData.map((entry, index) => (
+                  {mockServiceData.map((_, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}

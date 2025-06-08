@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Box,
   Paper,
@@ -26,7 +25,7 @@ import {
   LineChart,
   Line,
 } from 'recharts';
-import { MapContainer, TileLayer, HeatmapLayer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Mock data - TODO: Replace with API data
@@ -72,8 +71,6 @@ const mockRequestTrendData = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const Analytics: React.FC = () => {
-  const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Open':
